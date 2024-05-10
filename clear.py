@@ -13,10 +13,10 @@ def delete_files_in_directory(directory):
         elif os.path.isdir(item_path):
             delete_files_in_directory(item_path)
 
-delete_files_in_directory("/home/wangjingran/APMA/Outcome")
-delete_files_in_directory("/home/wangjingran/APMA/data")
+delete_files_in_directory("Outcome")
+delete_files_in_directory("data")
 
-folder_path = '/home/wangjingran/APMA/FoldX'
+folder_path = 'FoldX'
 files = os.listdir(folder_path)
 
 for file_name in files:
