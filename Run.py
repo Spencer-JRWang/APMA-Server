@@ -3,6 +3,32 @@ import os
 import glob
 import traceback
 
+# pocess position file
+f = open("/home/wangjingran/APMA/data/position.txt","r")
+all = f.readlines()
+all_new = []
+# print(all)
+for i in all:
+    if i == '\n':
+        pass
+    else:
+        string_split = i.split("\t")
+        string_a = string_split[0]
+        string_b = string_split[1]
+        string_b = string_b[:1] + "A" + string_b[1:]
+
+        FoldX_type_string = string_a + "\t" + string_b
+        all_new.append(FoldX_type_string)
+f.close()
+
+f = open("/home/wangjingran/APMA/data/position.txt","w")
+for i in all_new:
+    f.write(i)
+f.close()
+
+del all
+del all_new
+
 # fetch email
 email_list = []
 f = open("/home/wangjingran/APMA/data/email.txt")
@@ -23,6 +49,8 @@ def print_pdb_files(folder_path):
 folder_path = '/home/wangjingran/APMA/data'
 user_pdb = print_pdb_files(folder_path)
 user_protein_name = user_pdb.split("/")[-1].rstrip(".pdb")
+
+
 
 try:
 
@@ -78,7 +106,7 @@ files = os.listdir(folder_path)
 
 for file_name in files:
     
-    if file_name != 'foldx4' and file_name != 'rotabase.txt':
+    if file_name != 'foldx4' and file_name != 'rotabase.txt' and file_name != 'foldx5' and file_name != 'molecules':
         file_path = os.path.join(folder_path, file_name)
 
         os.remove(file_path)

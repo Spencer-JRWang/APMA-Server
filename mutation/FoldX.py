@@ -28,7 +28,7 @@ def run_FoldX(path_to_foldx,WT_PDB,mutant_file):
     folder_path = path_to_foldx
     os.chdir(folder_path)
     # 执行 FoldX 命令
-    foldx_command = f"./foldx4 --command=BuildModel --pdb={FoldX_WT_PDB} --mutant-file=individual_list.txt"
+    foldx_command = f"./foldx5 --command=BuildModel --pdb={FoldX_WT_PDB} --mutant-file=individual_list.txt"
     subprocess.run(foldx_command, shell=True)
     for filename in os.listdir(folder_path):
         # 检查文件名是否以 "WT_" 开头

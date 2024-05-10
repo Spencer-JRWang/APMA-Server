@@ -1,10 +1,8 @@
 import rpy2.robjects as robjects
 from rpy2.robjects.packages import importr
-
 bio3d = importr("bio3d")
 NACEN = importr("NACEN")
 igraph = importr("igraph", robject_translations={'.env':'__env'})
-
 def AAWEB(route,t, category, Mut_PDB,WT_PDB,data_rote):
     '''
     Function to calculate the Amino Acids Web Features for several given mutation type pdb files
@@ -16,17 +14,14 @@ def AAWEB(route,t, category, Mut_PDB,WT_PDB,data_rote):
     :param WT_PDB:
     :return: several files with Amino Acids Web features
     '''
-    
     element_count = category.count(t)
     r_code = f'''
 dsspfile <- "{route}"
-
 MT_degree <- c()
 MT_betweeness <- c()
 MT_closeness <- c()
 MT_eigenvector <- c()
 MT_clustering <- c()
-
 for(i in 1:{element_count}){{
 	data <- paste(c("{Mut_PDB}/{t}_",i,".pdb"),collapse="")
 	Net <- suppressMessages(NACENConstructor(PDBFile=data,WeightType = "Polarity",exefile = dsspfile,plotflag=F))
@@ -48,7 +43,6 @@ for(i in 1:{element_count}){{
     MT_eigenvector <- cbind(MT_eigenvector,ev)
     MT_clustering <- cbind(MT_clustering,tr)
 }}
-
 MT_degree <- rowMeans(MT_degree)
 MT_betweeness <- rowMeans(MT_betweeness)
 MT_closeness <- rowMeans(MT_closeness)
@@ -62,7 +56,6 @@ net <- NetP$Edgelist
 network <- c(net[,1],net[,2])
 network <- graph(network)
 result <- NetP$NetP
-
 degree <- result$K
 betweeness <- result$B
 closeness <- result$C
@@ -97,5 +90,4 @@ def data_AAW_gener(position, category):
         current_data_features = current_data[position[i]]
         AAW_data.append(current_data_features)
     return AAW_data
-
 
