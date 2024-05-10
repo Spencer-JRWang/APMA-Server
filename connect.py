@@ -34,7 +34,9 @@ time.sleep(5)
 sftp.close()
 
 # Run APMA
-remote_command = "nohup /home/wangjingran/.virtualenvs/DeepLearning/bin/python /home/wangjingran/APMA/Run.py > /home/wangjingran/APMA/run.log &"
+# EXAMPLE: remote_command = "nohup /home/wangjingran/.virtualenvs/DeepLearning/bin/python /home/wangjingran/APMA/Run.py > /home/wangjingran/APMA/run.log &"
+remote_command = '''nohup /path/to/your/virtual/python/environment
+                  /your/route/to/APMA/Run.py > /route/to/run.log &'''
 stdin, stdout, stderr = client.exec_command(remote_command)
 client.close()
 print("Your files have submitted successfully\n...APMA is running now...")
