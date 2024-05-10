@@ -4,7 +4,7 @@ import glob
 import traceback
 
 # pocess position file
-f = open("/home/wangjingran/APMA/data/position.txt","r")
+f = open("data/position.txt","r")
 all = f.readlines()
 all_new = []
 # print(all)
@@ -21,7 +21,7 @@ for i in all:
         all_new.append(FoldX_type_string)
 f.close()
 
-f = open("/home/wangjingran/APMA/data/position.txt","w")
+f = open("data/position.txt","w")
 for i in all_new:
     f.write(i)
 f.close()
@@ -31,7 +31,7 @@ del all_new
 
 # fetch email
 email_list = []
-f = open("/home/wangjingran/APMA/data/email.txt")
+f = open("data/email.txt")
 lines = f.readlines()
 for i in lines:
     line = i.strip("\n")
@@ -46,7 +46,7 @@ def print_pdb_files(folder_path):
         user_pdb_file = i
     return user_pdb_file
 
-folder_path = '/home/wangjingran/APMA/data'
+folder_path = 'data'
 user_pdb = print_pdb_files(folder_path)
 user_protein_name = user_pdb.split("/")[-1].rstrip(".pdb")
 
@@ -56,21 +56,21 @@ try:
 
     APMA(
     Protein_name = user_protein_name,
-    file_path = "/home/wangjingran/APMA/data/position.txt",
+    file_path = "data/position.txt",
     WT_PDB = user_pdb
     )
 
     from ML.figure import plot_roc_for_disease_pairs
-    plot_roc_for_disease_pairs("/home/wangjingran/APMA/data/paras.txt","/home/wangjingran/APMA/Outcome/Figure/ROC/Feature")
+    plot_roc_for_disease_pairs("data/paras.txt","Outcome/Figure/ROC/Feature")
 
     from ML.figure import plot_box
-    plot_box("/home/wangjingran/APMA/data/paras.txt","/home/wangjingran/APMA/Outcome/Figure/Box_Violin")
+    plot_box("data/paras.txt","Outcome/Figure/Box_Violin")
 
     from ML.figure import plot_spearman
-    plot_spearman("/home/wangjingran/APMA/data/paras.txt","/home/wangjingran/APMA/Outcome/Figure")
+    plot_spearman("data/paras.txt","Outcome/Figure")
 
     from Email.zip import zip_folder
-    zip_folder('/home/wangjingran/APMA/Outcome','/home/wangjingran/APMA/Email/APMA_outcome.zip')
+    zip_folder('Outcome','Email/APMA_outcome.zip')
     
     from Email.send import send_email
     send_email(email_list)
@@ -98,10 +98,10 @@ def delete_files_in_directory(directory):
         elif os.path.isdir(item_path):
             delete_files_in_directory(item_path)
 
-delete_files_in_directory("/home/wangjingran/APMA/Outcome")
-delete_files_in_directory("/home/wangjingran/APMA/data")
+delete_files_in_directory("Outcome")
+delete_files_in_directory("data")
 
-folder_path = '/home/wangjingran/APMA/FoldX'
+folder_path = 'FoldX'
 files = os.listdir(folder_path)
 
 for file_name in files:

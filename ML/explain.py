@@ -51,12 +51,12 @@ def model_explain(model_name, X, y, name, type = "Tree"):
                 shap_values[1], 
                 X,
                 link = "logit")
-        shap.save_html(f'/home/wangjingran/APMA/Outcome/Figure/Explain/{model_name}_force_plot_{name}.html', p)
+        shap.save_html(f'Outcome/Figure/Explain/{model_name}_force_plot_{name}.html', p)
 
         # 保存summaryplot
         fig = shap.summary_plot(shap_values[1], X, alpha=0.75, show = False)
         plt.title(f"{name}",fontweight='bold',fontsize = 15)
         plt.xlabel("Impact on model output")
-        plt.savefig(f"/home/wangjingran/APMA/Outcome/Figure/Explain/{model_name}_shap_summary_plot_{name}.pdf", bbox_inches='tight')
+        plt.savefig(f"Outcome/Figure/Explain/{model_name}_shap_summary_plot_{name}.pdf", bbox_inches='tight')
         plt.close()
         return shap_values

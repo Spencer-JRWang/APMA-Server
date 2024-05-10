@@ -28,7 +28,7 @@ from tqdm import tqdm
 from .model import model_rfe
 from .model import stacking_model
 
-def ML_Build(category,file = '/home/wangjingran/APMA/data/paras.txt'):
+def ML_Build(category,file = 'data/paras.txt'):
     '''
     This function is intended to search for the best model and feature combination
     using machine learning algorithms based on given data file (default: paras.txt).
@@ -66,7 +66,7 @@ def ML_Build(category,file = '/home/wangjingran/APMA/data/paras.txt'):
     from .figure import plot_roc_curve
     from .figure import save_bar_chart_as_pdf
     RFE_outcome = []
-    f = open("/home/wangjingran/APMA/Outcome/Feature_selection.txt","w")
+    f = open("Outcome/Feature_selection.txt","w")
     # 如果category在搜索的字段中就进行标签归类
     for i in category:
         if i[0] == "Control" or i[0] == "control" or i[0] == "Control":
@@ -92,7 +92,7 @@ def ML_Build(category,file = '/home/wangjingran/APMA/data/paras.txt'):
         df = df_all[df_all['Disease'].isin([Cat_A, Cat_B])]
         Site = df.reset_index(drop=True)[['Site']]
         Mutation = df.reset_index(drop=True)[['Mutation']]
-        save_bar_chart_as_pdf(df,'/home/wangjingran/APMA/Outcome/Figure/Importance/Importance_'+ str(Cat_A) + " vs " + str(Cat_B))
+        save_bar_chart_as_pdf(df,'Outcome/Figure/Importance/Importance_'+ str(Cat_A) + " vs " + str(Cat_B))
         df = df.drop(columns = ["Site","Mutation"])
         #df = df.drop("Mutation", axis = 1)
         RFE_Cat = []
@@ -125,13 +125,11 @@ def ML_Build(category,file = '/home/wangjingran/APMA/data/paras.txt'):
             fpr, tpr, thresholds = roc_curve(Best_IndegratedScore.iloc[:, 0], Best_IndegratedScore.iloc[:, 2])
             roc_auc = auc(fpr, tpr)
             # 保存文件和图像
-            plot_roc_curve(fpr,tpr,roc_auc,'/home/wangjingran/APMA/Outcome/Figure/ROC/ML/' + exp[j] +"_"+ str(Cat_A) + " vs " + str(Cat_B)+".pdf")
-            Best_IndegratedScore.to_csv('/home/wangjingran/APMA/Outcome/Score/' + str(exp[j]) + "_" + str(Cat_A) + " vs " + str(Cat_B) +'.txt',
+            plot_roc_curve(fpr,tpr,roc_auc,'Outcome/Figure/ROC/ML/' + exp[j] +"_"+ str(Cat_A) + " vs " + str(Cat_B)+".pdf")
+            Best_IndegratedScore.to_csv('Outcome/Score/' + str(exp[j]) + "_" + str(Cat_A) + " vs " + str(Cat_B) +'.txt',
                 sep='\t', index=False, header=True)
 
             Best_IndegratedScore.iloc[:, 0] = Best_IndegratedScore.iloc[:, 0].map({0: Cat_A, 1: Cat_B})
-            #Best_IndegratedScore.to_csv('/home/wangjingran/APMA/Outcome/Score/' + str(Cat_A) + " vs " + str(Cat_B) +'.txt',
-            #    sep='\t', index=False, header=True)
         RFE_outcome.append(RFE_Cat)
     f.close()
 

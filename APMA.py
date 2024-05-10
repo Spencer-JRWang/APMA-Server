@@ -10,7 +10,7 @@ import threading
 
 
 
-def APMA(WT_PDB, Protein_name, file_path,MSA_data = "/home/wangjingran/APMA/data/query_msa.fasta", FoldX = "/home/wangjingran/APMA/FoldX"):
+def APMA(WT_PDB, Protein_name, file_path,MSA_data = "data/query_msa.fasta", FoldX = "FoldX"):
     '''
     APMA 机器学习辅助的整合蛋白质突变模型
     作者：王景然
@@ -45,13 +45,13 @@ def APMA(WT_PDB, Protein_name, file_path,MSA_data = "/home/wangjingran/APMA/data
     position = site_list
     position = [int(num) for num in position]
     # 获取蛋白质的全序列
-    pdb_sequences = extract_sequence_from_pdb(f'/home/wangjingran/APMA/data/{Protein_name}.pdb')
+    pdb_sequences = extract_sequence_from_pdb(f'data/{Protein_name}.pdb')
     protein_sequence = ''.join(pdb_sequences)
     sequence = protein_sequence
 
     # 先进行blast
     # 获取蛋白质的全序列
-    pdb_sequences = extract_sequence_from_pdb(f'/home/wangjingran/APMA/data/{Protein_name}.pdb')
+    pdb_sequences = extract_sequence_from_pdb(f'data/{Protein_name}.pdb')
     protein_sequence = ''.join(pdb_sequences)
     sequence = protein_sequence
 
@@ -62,7 +62,7 @@ def APMA(WT_PDB, Protein_name, file_path,MSA_data = "/home/wangjingran/APMA/data
     while current_try_for_blast < max_try_for_blast:
         current_try_for_blast += 1
         try:
-            output_file = "/home/wangjingran/APMA/data/blast_results.fasta"
+            output_file = "data/blast_results.fasta"
             print(f"BLAST Search Started {current_try_for_blast} time")
             blast_search(sequence, output_file)
             print(f"BLAST Search success")
@@ -75,7 +75,7 @@ def APMA(WT_PDB, Protein_name, file_path,MSA_data = "/home/wangjingran/APMA/data
         print("Error: BLAST search failed after multiple tries.")
     
     # 输入的FASTA文件，这里假设你已经有了一些同源序列的FASTA文件
-    with open("/home/wangjingran/APMA/data/blast_results.fasta", "r") as f:
+    with open("data/blast_results.fasta", "r") as f:
         sequence_blast = []
         s_lines = f.readlines()
         for i in s_lines:
@@ -90,7 +90,7 @@ def APMA(WT_PDB, Protein_name, file_path,MSA_data = "/home/wangjingran/APMA/data
             random_numbers = random.sample(range(1, len(sequence_blast)), 200)
             sequence_blast = [sequence_blast[i] for i in random_numbers]
     
-    with open("/home/wangjingran/APMA/data/blast_results.fasta", "w") as f:
+    with open("data/blast_results.fasta", "w") as f:
         f.write(">Input_Seq" + "\n")
         f.write(sequence + "\n")
         for i in range(len(sequence_blast)):
@@ -106,18 +106,18 @@ def APMA(WT_PDB, Protein_name, file_path,MSA_data = "/home/wangjingran/APMA/data
         while current_try_for_cl < max_try_for_cl:
             current_try_for_cl += 1
             try:
-                input_fasta = "/home/wangjingran/APMA/data/blast_results.fasta"
+                input_fasta = "data/blast_results.fasta"
                 # 输出的FASTA文件，用于保存比对结果
-                output_fasta = "/home/wangjingran/APMA/data/query_msa.fasta"
+                output_fasta = "data/query_msa.fasta"
                 
                 # 运行多序列比对
                 print(f"MSA started {current_try_for_cl} time")
                 run_clustal(input_fasta, output_fasta)
-                with open("/home/wangjingran/APMA/data/query_msa.fasta", 'r') as f:
+                with open("data/query_msa.fasta", 'r') as f:
                     lines = f.readlines()
                 lines[0] = '>Input_seq\n'
                 
-                with open("/home/wangjingran/APMA/data/query_msa.fasta", 'w') as f:
+                with open("data/query_msa.fasta", 'w') as f:
                     f.writelines(lines)
                 # 成功就跳出
                 print("MSA success")
@@ -141,13 +141,13 @@ def APMA(WT_PDB, Protein_name, file_path,MSA_data = "/home/wangjingran/APMA/data
                 # time.sleep(30)
                 # run_rate4site("/home/wangjingran/APMA/data/query_msa.fasta", "/home/wangjingran/APMA/data/score.txt")
                 
-                process = subprocess.Popen("rate4site -s /home/wangjingran/APMA/data/query_msa.fasta -o /home/wangjingran/APMA/data/score.txt", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                process = subprocess.Popen("rate4site -s data/query_msa.fasta -o data/score.txt", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 output, error = process.communicate()
                 print("Output:", output.decode().strip())
                 print("Error:", error.decode().strip())
 
                 Consurf_Score = []
-                f = open("/home/wangjingran/APMA/data/score.txt","r")
+                f = open("data/score.txt","r")
                 all = f.readlines()
                 for i in range(len(all)):
                     if i in [0,1,2,3,4,5,6,7,8,9,10,11,12,len(all)-2,len(all)-1,len(all)]:
@@ -167,9 +167,6 @@ def APMA(WT_PDB, Protein_name, file_path,MSA_data = "/home/wangjingran/APMA/data
                 time.sleep(5)
         else:
             print("Error: rate4site failed after multiple tries.")
-        
-        if not Consurf_Scores:
-            raise ValueError("rate4site failed")
 ##############################################################################################################################
     # 使用foldx构建突变体的pdb
     def part_FoldX():
@@ -198,7 +195,7 @@ def APMA(WT_PDB, Protein_name, file_path,MSA_data = "/home/wangjingran/APMA/data
         # 有问题：对位点敏感
         # 但是对突变不敏感
         for i in set_category:
-            AAWEB(absolute_path,i,category,Mut_PDB,WT_PDB,"/home/wangjingran/APMA/data/AAWeb")
+            AAWEB(absolute_path,i,category,Mut_PDB,WT_PDB,"data/AAWeb")
         # AAWEB(absolute_path,category,Protein_name,Mut_PDB,WT_PDB,"/home/wangjingran/APMA/data",position)
         from Feature_Cal.AAWeb import data_AAW_gener
         # 获取计算出来的中心性数据
@@ -265,8 +262,8 @@ def APMA(WT_PDB, Protein_name, file_path,MSA_data = "/home/wangjingran/APMA/data
     df_all["Stiffness"] = [sublist[4] for sublist in dynamics]
 
 # 将结果保存到paras.txt文件中
-    df_all.to_csv("/home/wangjingran/APMA/data/paras.txt", sep='\t',index=False)
-    df_all.to_csv("/home/wangjingran/APMA/Outcome/paras.txt",sep = '\t', index=False)
+    df_all.to_csv("data/paras.txt", sep='\t',index=False)
+    df_all.to_csv("Outcome/paras.txt",sep = '\t', index=False)
 ############################################################################################################################## 
     print("..Machine Learning Starting...")
     from ML import ML_Build

@@ -32,5 +32,5 @@ def all_DSSP_RASA(filename):
     return protein_rasa
 
 if __name__ == "__main__":
-    protein_rasa = all_DSSP_RASA("/home/wangjingran/APMA/data/alphafoldpten.pdb")
+    protein_rasa = all_DSSP_RASA("data/alphafoldpten.pdb")
     print(protein_rasa)
