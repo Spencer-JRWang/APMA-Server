@@ -145,7 +145,7 @@ def model_combinations():
         ('RandomForest',RandomForestClassifier(n_estimators=2500,max_depth=5)),
         ('GradientBoost',GradientBoostingClassifier(n_estimators=1000)),
         ('LGBM',LGBMClassifier(verbose = -1,n_estimators=1000,max_depth=5)),
-        ('XGBoost',XGBClassifier(n_estimators = 1000,max_depth = 5)),
+        ('XGBoost',XGBClassifier(n_estimators = 1000,max_depth = 5))#,
         #('CatBoost',CatBoostClassifier(verbose = False,iterations = 1000, n_jobs = -1))
     ]
     from itertools import combinations
