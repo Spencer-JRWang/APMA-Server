@@ -142,11 +142,11 @@ adding grid search
 
 def model_combinations():
     base_model = [
-        ('RandomForest',RandomForestClassifier(n_estimators=2500, n_jobs=-1)),
-        ('GradientBoost',GradientBoostingClassifier(n_estimators=1000, n_jobs = -1)),
-        ('LGBM',LGBMClassifier(verbose = -1,n_estimators=1000, n_jobs = -1)),
-        ('XGBoost',XGBClassifier(n_estimators = 1000, n_jobs = -1)),
-        ('CatBoost',CatBoostClassifier(verbose = False,iterations = 1000, n_jobs = -1))
+        ('RandomForest',RandomForestClassifier(n_estimators=2500,max_depth=5)),
+        ('GradientBoost',GradientBoostingClassifier(n_estimators=1000)),
+        ('LGBM',LGBMClassifier(verbose = -1,n_estimators=1000,max_depth=5)),
+        ('XGBoost',XGBClassifier(n_estimators = 1000,max_depth = 5)),
+        #('CatBoost',CatBoostClassifier(verbose = False,iterations = 1000, n_jobs = -1))
     ]
     from itertools import combinations
     all_combinations = []
@@ -164,18 +164,19 @@ def stacking_model(site,mutation,X,y_encode,base_model):
     X = X.iloc[shuffle_index]
     y_encode = y_encode.iloc[shuffle_index]
     meta_model = LogisticRegression(max_iter=10000000)
-    stacking_clf = StackingClassifier(estimators=base_model, 
-                                      final_estimator=meta_model, 
+    stacking_clf = StackingClassifier(estimators=base_model,
+                                      final_estimator=meta_model,
                                       stack_method='predict_proba',
-                                      n_jobs=-1)
+                                      n_jobs = -1)
     score_st = cross_val_predict(stacking_clf, X, y_encode, cv=stratified_kfold, method="predict_proba")
-    scores_st.append(score_st[:, 1])
-    scores_st = np.array(scores_st)
+    # 这是尝试的
+    scores_st = score_st[:, 1].tolist()
+    # scores_st.append(score_st[:, 1])
+    # scores_st = np.array(scores_st)
     # scores_st = np.mean(scores_st, axis=0)
     dff = y_encode.to_frame()
     dff["Site"] = site.iloc[shuffle_index]
     dff["IntegratedScore"] = scores_st
     dff["Mutation"] = mutation.iloc[shuffle_index]
     return dff
-
 
