@@ -164,10 +164,15 @@ def stacking_model(site,mutation,X,y_encode,base_model):
     X = X.iloc[shuffle_index]
     y_encode = y_encode.iloc[shuffle_index]
     meta_model = LogisticRegression(max_iter=10000000)
+    # use this while having strong CPU
+    # stacking_clf = StackingClassifier(estimators=base_model,
+    #                                   final_estimator=meta_model,
+    #                                   stack_method='predict_proba',
+    #                                   n_jobs = -1)
     stacking_clf = StackingClassifier(estimators=base_model,
                                       final_estimator=meta_model,
                                       stack_method='predict_proba',
-                                      n_jobs = -1)
+                                      )
     score_st = cross_val_predict(stacking_clf, X, y_encode, cv=stratified_kfold, method="predict_proba")
     # 这是尝试的
     scores_st = score_st[:, 1].tolist()
