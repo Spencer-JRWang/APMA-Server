@@ -171,7 +171,7 @@ def stacking_model(site,mutation,X,y_encode,base_model):
     score_st = cross_val_predict(stacking_clf, X, y_encode, cv=stratified_kfold, method="predict_proba")
     scores_st.append(score_st[:, 1])
     scores_st = np.array(scores_st)
-    scores_st = np.mean(scores_st, axis=0)
+    # scores_st = np.mean(scores_st, axis=0)
     dff = y_encode.to_frame()
     dff["Site"] = site.iloc[shuffle_index]
     dff["IntegratedScore"] = scores_st
